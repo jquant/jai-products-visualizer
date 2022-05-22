@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import type { AppProps } from 'next/app';
 
 import { ChakraProvider, extendTheme } from '@chakra-ui/react';
@@ -34,6 +35,9 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <ChakraProvider theme={theme} resetCSS>
+      <Head>
+        <title>JAI Products Visualizer</title>
+      </Head>
       <LocaleProvider>
         <UsersProvider>
           <ProductsProvider>
