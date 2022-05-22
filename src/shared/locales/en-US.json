@@ -1,0 +1,22 @@
+{
+  "login": {
+    "title": "Enter your access token",
+    "subtitle": "And we show the selected products for you 😄",
+    "inputPlaceholder": "Type your access token",
+    "accessError": "Invalid access token. Please, try again."
+  },
+  "products": {
+    "title": "Our products"
+  },
+  "loadError": {
+    "title": "Unable to load the page",
+    "button": "Try again"
+  },
+  "product": {
+    "title": "Cool clothing model",
+    "cartButton": "Add to cart",
+    "similarProductsSectionTitle": "Others similar products",
+    "breadcrumbParent": "Products",
+    "breadcrumbCurrent": "Product"
+  }
+}

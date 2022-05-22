@@ -1,0 +1,22 @@
+{
+  "login": {
+    "title": "Insira sua chave de acesso",
+    "subtitle": "Daí exibiremos os produtos selecionados para você 😄",
+    "inputPlaceholder": "Digite a chave de acesso",
+    "accessError": "Chave de acesso inválida. Por favor, tente novamente."
+  },
+  "products": {
+    "title": "Nossos produtos"
+  },
+  "loadError": {
+    "title": "Não conseguimos carregar a página",
+    "button": "Tentar novamente"
+  },
+  "product": {
+    "title": "Modelo de roupa legal",
+    "cartButton": "Adicionar ao carrinho",
+    "similarProductsSectionTitle": "Outros produtos semelhantes",
+    "breadcrumbParent": "Produtos",
+    "breadcrumbCurrent": "Produto"
+  }
+}
