@@ -41,7 +41,7 @@ export function Header() {
           gridGap="4"
         >
           <Link href="/products" passHref>
-            <Text as="a" fontSize="md" fontWeight="black">
+            <Text as="a" fontSize="md" fontWeight="bold">
               🏪 FakeStore
             </Text>
           </Link>
