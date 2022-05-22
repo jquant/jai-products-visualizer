@@ -1,14 +1,6 @@
 import { api } from '@shared/services/configs/api.config';
 
-export type RouteResponseProps = {
-  similarity: Array<{
-    query_id: number;
-    results: Array<{
-      id: number;
-      distance: number;
-    }>;
-  }>;
-};
+import { GetSimilarProductsApiResponse } from './types';
 
 export class GetSimilarProducts {
   static async execute(params: {
@@ -16,7 +8,7 @@ export class GetSimilarProducts {
     id: number;
   }): Promise<number[] | null> {
     try {
-      const response = await api.get<RouteResponseProps>(
+      const response = await api.get<GetSimilarProductsApiResponse>(
         '/similar/id/productimages',
         {
           headers: {
