@@ -1,4 +1,5 @@
 import {
+  GetDatabasesName,
   GetProductsIds,
   GetSimilarProducts,
 } from '@shared/services/usecases/products';
@@ -14,6 +15,7 @@ export function ProductsProvider({ children }: { children: ReactNode }) {
       value={{
         fetchSimilarProducts: GetSimilarProducts.execute,
         fetchProducts: GetProductsIds.execute,
+        fetchDatabasesName: GetDatabasesName.execute,
       }}
     >
       {children}

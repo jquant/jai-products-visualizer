@@ -41,8 +41,8 @@ export function ProductsSection({ database }: ProductsSectionProps) {
           modules={[Pagination, Navigation]}
           slidesPerView={4}
           spaceBetween={30}
-          pagination
           direction="horizontal"
+          navigation
         >
           {products.length > 0 ? (
             products.slice(0, 10).map((id) => (

@@ -13,6 +13,7 @@ import { AnimatePresence } from 'framer-motion';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+
 import '@fontsource/sora/300.css';
 import '@fontsource/sora/400.css';
 import '@fontsource/sora/500.css';

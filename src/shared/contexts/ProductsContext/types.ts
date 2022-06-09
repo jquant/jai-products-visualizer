@@ -4,4 +4,5 @@ export type ProductsContextProps = {
     ids: number[];
   }): Promise<number[] | null>;
   fetchProducts(database: string): Promise<number[] | null>;
+  fetchDatabasesName: () => Promise<string[] | null>;
 };
