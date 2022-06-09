@@ -184,7 +184,7 @@ export function ProductTemplate({ productId }: ProductTemplateProps) {
         </Flex>
 
         <Flex direction="column" as="section" gridGap={4}>
-          <Skeleton w="64" isLoaded={similarProducts.length > 0}>
+          <Skeleton isLoaded={similarProducts.length > 0}>
             <Text fontWeight="500">
               👉🏻 {locale.product.similarProductsSectionTitle}
             </Text>

@@ -1,5 +1,6 @@
 import { getSessionData } from '@shared/utils/get-session-data';
 import { authenticate, similaritySearchById } from 'jai-sdk';
+import { GetSimilarProductsApiResponse } from './types';
 
 export class GetSimilarProducts {
   static async execute(params: {
@@ -15,9 +16,12 @@ export class GetSimilarProducts {
     authenticate(client.access_token);
 
     try {
-      const response = similaritySearchById(params.database, params.ids);
+      const response = (await similaritySearchById(
+        params.database,
+        params.ids
+      )) as GetSimilarProductsApiResponse;
 
-      return response;
+      return response.similarity[0].results.map((item) => item.id) || null;
     } catch {
       return null;
     }

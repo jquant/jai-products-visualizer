@@ -13,17 +13,10 @@ export function ProductBox({ productId }: ProductBoxProps) {
       <Flex as="a" direction="column" gridGap="4" w="full">
         <Box
           w="full"
-          h={{
-            base: '64',
-            md: '56',
-          }}
+          minH="64"
           position="relative"
           borderRadius="8px"
-          __css={{
-            '& *': {
-              borderRadius: '8px',
-            },
-          }}
+          overflow="hidden"
         >
           <Image
             src={getImageUrl(productId)}
