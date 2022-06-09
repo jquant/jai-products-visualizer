@@ -16,8 +16,6 @@ export function ProductsTemplate() {
   const [products, setProducts] = useState<number[]>([]);
   const [error, setError] = useState(false);
 
-  const router = useRouter();
-  const { accessToken } = useUsers();
   const { fetchProducts } = useProducts();
   const { locale } = useLocale();
 
@@ -42,7 +40,7 @@ export function ProductsTemplate() {
 
   useEffect(() => {
     async function fetch() {
-      const items = await fetchProducts(accessToken);
+      const items = await fetchProducts('productimages');
 
       if (items) {
         setProducts(items);
@@ -50,7 +48,7 @@ export function ProductsTemplate() {
     }
 
     void fetch();
-  }, [accessToken, fetchProducts]);
+  }, [fetchProducts]);
 
   if (error) {
     return <ErrorBox />;

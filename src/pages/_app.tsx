@@ -10,19 +10,19 @@ import {
 
 import { AnimatePresence } from 'framer-motion';
 
-import '@fontsource/inter/300.css';
-import '@fontsource/inter/400.css';
-import '@fontsource/inter/500.css';
-import '@fontsource/inter/600.css';
-import '@fontsource/inter/700.css';
-import '@fontsource/inter/800.css';
+import '@fontsource/sora/300.css';
+import '@fontsource/sora/400.css';
+import '@fontsource/sora/500.css';
+import '@fontsource/sora/600.css';
+import '@fontsource/sora/700.css';
+import '@fontsource/sora/800.css';
 
 import 'react-toastify/dist/ReactToastify.css';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const theme = extendTheme({
     fonts: {
-      body: 'Inter, sans-serif',
+      body: 'Sora, sans-serif',
     },
     styles: {
       global: {
@@ -36,7 +36,8 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider theme={theme} resetCSS>
       <Head>
-        <title>JAI Products Visualizer</title>
+        <link rel="icon" href="/images/jai_logo.png" />
+        <title>JAI - Products Visualizer</title>
       </Head>
       <LocaleProvider>
         <UsersProvider>

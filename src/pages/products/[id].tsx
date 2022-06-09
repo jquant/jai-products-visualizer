@@ -9,10 +9,10 @@ const ProductDetails: NextPage<{
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const accessToken = ctx.req.cookies['access_token'];
+  const clientSession = ctx.req.cookies['client_session'];
   const productId = ctx.params?.id;
 
-  if (!accessToken) {
+  if (!clientSession) {
     return {
       redirect: {
         permanent: false,

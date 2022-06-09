@@ -1,31 +1,23 @@
-import { api } from '@shared/services/configs/api.config';
-
-import { GetSimilarProductsApiResponse } from './types';
+import { getSessionData } from '@shared/utils/get-session-data';
+import { authenticate, similaritySearchById } from 'jai-sdk';
 
 export class GetSimilarProducts {
   static async execute(params: {
-    accessToken: string;
-    id: number;
+    database: string;
+    ids: number[];
   }): Promise<number[] | null> {
-    try {
-      const response = await api.get<GetSimilarProductsApiResponse>(
-        '/similar/id/productimages',
-        {
-          headers: {
-            Auth: params.accessToken,
-          },
-          params: {
-            id: params.id,
-            top_k: 5,
-          },
-        }
-      );
+    const client = getSessionData();
 
-      return (
-        response.data.similarity[0].results
-          .filter((item) => item.id !== params.id)
-          .map((item) => item.id) || null
-      );
+    if (!client) {
+      return null;
+    }
+
+    authenticate(client.access_token);
+
+    try {
+      const response = similaritySearchById(params.database, params.ids);
+
+      return response;
     } catch {
       return null;
     }

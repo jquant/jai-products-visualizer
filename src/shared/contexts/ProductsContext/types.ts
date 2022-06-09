@@ -1,7 +1,7 @@
 export type ProductsContextProps = {
   fetchSimilarProducts(params: {
-    accessToken: string;
-    id: number;
+    database: string;
+    ids: number[];
   }): Promise<number[] | null>;
-  fetchProducts(accessToken: string): Promise<number[] | null>;
+  fetchProducts(database: string): Promise<number[] | null>;
 };

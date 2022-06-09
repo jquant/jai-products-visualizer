@@ -1,15 +1,19 @@
-import { api } from '@shared/services/configs/api.config';
-
+import { authenticate, getIds } from 'jai-sdk';
+import { getSessionData } from '@shared/utils/get-session-data';
 export class GetProductsIds {
-  static async execute(access_token: string): Promise<number[] | null> {
-    try {
-      const response = await api.get('/id/productimages', {
-        headers: {
-          Auth: access_token,
-        },
-      });
+  static async execute(database: string): Promise<number[] | null> {
+    const client = getSessionData();
 
-      return response.data;
+    if (!client) {
+      return null;
+    }
+
+    authenticate(client.access_token);
+
+    try {
+      const response = await getIds(database, 'complete');
+
+      return response;
     } catch (e) {
       return null;
     }

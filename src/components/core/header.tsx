@@ -21,7 +21,7 @@ export function Header() {
   }
 
   function handleSignOut() {
-    removeCookie('access_token', {
+    removeCookie('client_session', {
       path: '/',
     });
     router.push('/');

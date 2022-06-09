@@ -41,8 +41,8 @@ export function ProductTemplate({ productId }: ProductTemplateProps) {
   useEffect(() => {
     async function fetch() {
       const items = await fetchSimilarProducts({
-        accessToken,
-        id: productId,
+        database: 'productimages',
+        ids: [productId],
       });
 
       if (items) {
