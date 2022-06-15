@@ -1,5 +1,5 @@
 import { getSessionData } from '@shared/utils/get-session-data';
-import { authenticate, similaritySearchById } from 'jai-sdk';
+import { authenticate, getDatabaseInfo, similaritySearchById } from 'jai-sdk';
 import { GetSimilarProductsApiResponse } from './types';
 
 export class GetSimilarProducts {
@@ -14,6 +14,7 @@ export class GetSimilarProducts {
     }
 
     authenticate(client.access_token);
+    console.log(await getDatabaseInfo('complete'));
 
     try {
       const response = (await similaritySearchById(

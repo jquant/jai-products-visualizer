@@ -15,10 +15,12 @@ import {
   Box,
   InputGroup,
   InputRightElement,
+  InputLeftElement,
   Select,
 } from '@chakra-ui/react';
 
 import { MdClose } from 'react-icons/md';
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { toast } from 'react-toastify';
 
 import { useLocale } from '@shared/hooks/useLocale';
@@ -32,9 +34,10 @@ type FormData = {
 export function LoginTemplate() {
   const [isLoading, setIsLoading] = useState(false);
   const [isAValidAccessToken, setIsAValidAccessToken] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [environments, setEnvironments] = useState<Environment[]>([]);
 
-  const { register, handleSubmit, reset } = useForm<FormData>();
+  const { register, handleSubmit, reset, getValues } = useForm<FormData>();
 
   const router = useRouter();
   const { locale } = useLocale();
@@ -44,12 +47,16 @@ export function LoginTemplate() {
     setIsLoading(true);
 
     if (!isAValidAccessToken) {
-      const { isValid, environments: envs } = await validateAuthToken(
-        data.access_token
-      );
+      try {
+        const { isValid, environments: envs } = await validateAuthToken(
+          data.access_token
+        );
 
-      setIsAValidAccessToken(isValid);
-      setEnvironments(envs);
+        setIsAValidAccessToken(isValid);
+        setEnvironments(envs);
+      } catch {
+        toast.error('The inserted key is probably invalid');
+      }
     } else {
       try {
         await authenticateUser(data.access_token, data.access_environment);
@@ -119,17 +126,8 @@ export function LoginTemplate() {
                   </Text>
                 </Stack>
                 <InputGroup>
-                  <Input
-                    type="text"
-                    variant="filled"
-                    placeholder={locale.login.inputPlaceholder}
-                    disabled={isLoading || isAValidAccessToken}
-                    {...register('access_token', {
-                      required: true,
-                    })}
-                  />
                   {isAValidAccessToken && (
-                    <InputRightElement
+                    <InputLeftElement
                       as="button"
                       type="button"
                       top="50%"
@@ -141,6 +139,32 @@ export function LoginTemplate() {
                       }}
                     >
                       <MdClose size={16} />
+                    </InputLeftElement>
+                  )}
+                  <Input
+                    type={showPassword ? 'text' : 'password'}
+                    variant="filled"
+                    placeholder={locale.login.inputPlaceholder}
+                    disabled={isLoading || isAValidAccessToken}
+                    {...register('access_token', {
+                      required: true,
+                    })}
+                  />
+                  {!(isLoading || isAValidAccessToken) && (
+                    <InputRightElement
+                      as="button"
+                      type="button"
+                      top="50%"
+                      transform="translateY(-50%)"
+                      cursor="pointer"
+                      onClick={() => setShowPassword(!showPassword)}
+                      disabled={isLoading || isAValidAccessToken}
+                    >
+                      {showPassword ? (
+                        <AiOutlineEyeInvisible />
+                      ) : (
+                        <AiOutlineEye />
+                      )}
                     </InputRightElement>
                   )}
                 </InputGroup>
@@ -153,7 +177,7 @@ export function LoginTemplate() {
                   })}
                 >
                   {environments.map((env) => (
-                    <option key={env.id} value={env.id}>
+                    <option key={env.id} value={env.name}>
                       {env.name}
                     </option>
                   ))}

@@ -6,7 +6,7 @@
     "accessError": "Invalid access token. Please, try again."
   },
   "products": {
-    "title": "Our products"
+    "title": "See our products"
   },
   "loadError": {
     "title": "Unable to load the page",

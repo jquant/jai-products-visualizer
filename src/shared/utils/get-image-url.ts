@@ -1,3 +1,3 @@
-export function getImageUrl(id: number) {
-  return `https://myceliademo.blob.core.windows.net/fashion-imgs/images/${id}.jpg`;
+export function getImageUrl(id: string) {
+  return `https://myceliademo.blob.core.windows.net/hm-imgs/original_imgs/${id}.jpg`;
 }

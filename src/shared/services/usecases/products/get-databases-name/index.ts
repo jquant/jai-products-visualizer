@@ -10,8 +10,6 @@ export class GetDatabasesName {
       return null;
     }
 
-    authenticate(client.access_token);
-
     try {
       const response = (await getDatabaseInfo('names')) as unknown as string[];
 

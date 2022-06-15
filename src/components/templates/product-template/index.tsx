@@ -10,12 +10,14 @@ import {
   Button,
   Container,
   Flex,
+  Grid,
   Skeleton,
   Stack,
   Text,
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
+  GridItem,
 } from '@chakra-ui/react';
 
 import { ErrorBox } from '@components/core/error';
@@ -26,32 +28,60 @@ import { useLocale } from '@shared/hooks/useLocale';
 import { useProducts } from '@shared/hooks/useProducts';
 import { useUsers } from '@shared/hooks/useUsers';
 
+import { ProductProps } from '@shared/services/usecases/products/get-products/types';
 import { getImageUrl } from '@shared/utils/get-image-url';
 
 import { ProductTemplateProps } from './types';
 
 export function ProductTemplate({ productId }: ProductTemplateProps) {
-  const [similarProducts, setSimilarProducts] = useState<number[]>([]);
+  const [product, setProduct] = useState<ProductProps | null>(null);
+  const [similarProducts, setSimilarProducts] = useState<ProductProps[]>([]);
   const [error, setError] = useState(false);
 
-  const { accessToken } = useUsers();
-  const { fetchSimilarProducts } = useProducts();
   const { locale } = useLocale();
+  const { accessToken } = useUsers();
+  const { fetchSimilarProducts, fetchProducts } = useProducts();
 
   useEffect(() => {
     async function fetch() {
-      const items = await fetchSimilarProducts({
-        database: 'productimages',
-        ids: [productId],
+      const findProduct = await fetchProducts({
+        filter: {
+          article_id: Number(productId),
+        },
       });
 
-      if (items) {
-        setSimilarProducts(items);
+      if (findProduct) {
+        setProduct(findProduct.items[0]);
       } else setError(true);
     }
 
     void fetch();
-  }, [accessToken, fetchSimilarProducts, productId]);
+  }, [fetchProducts, productId]);
+
+  useEffect(() => {
+    async function fetch() {
+      const items = await fetchSimilarProducts({
+        database: 'hm_imgs',
+        ids: [productId],
+      });
+
+      if (items) {
+        const findProducts = await fetchProducts({
+          filter: {
+            $or: items.map((id) => ({
+              article_id: Number(id),
+            })),
+          },
+        });
+
+        if (findProducts) {
+          setSimilarProducts(findProducts.items);
+        }
+      } else setError(true);
+    }
+
+    void fetch();
+  }, [accessToken, fetchSimilarProducts, productId, fetchProducts]);
 
   if (error) {
     return <ErrorBox />;
@@ -65,15 +95,15 @@ export function ProductTemplate({ productId }: ProductTemplateProps) {
         experimental_spaceY={8}
         mb={16}
       >
-        <Flex
-          direction={{
-            base: 'column',
-            md: 'row',
+        <Grid
+          templateColumns={{
+            base: 'repeat(1, 1fr)',
+            md: 'repeat(12, 1fr)',
           }}
-          alignItems="flex-start"
           gridGap={8}
         >
           <Skeleton
+            as={GridItem}
             isLoaded={similarProducts.length > 0}
             flex={{
               base: 'auto',
@@ -82,6 +112,7 @@ export function ProductTemplate({ productId }: ProductTemplateProps) {
             height="lg"
             w="full"
             position="relative"
+            colSpan={7}
           >
             <Box
               borderRadius="8px"
@@ -92,14 +123,21 @@ export function ProductTemplate({ productId }: ProductTemplateProps) {
               }}
             >
               <Image
-                src={getImageUrl(productId)}
+                src={getImageUrl(String(productId).slice(1))}
                 layout="fill"
                 objectFit="cover"
                 alt={`Image with ID ${productId}`}
               />
             </Box>
           </Skeleton>
-          <Flex direction="column" flex="1" experimental_spaceY={8}>
+
+          <Flex
+            as={GridItem}
+            direction="column"
+            flex="1"
+            experimental_spaceY={8}
+            colSpan={5}
+          >
             <Stack spacing={4}>
               <Stack spacing={2}>
                 <Skeleton
@@ -117,7 +155,7 @@ export function ProductTemplate({ productId }: ProductTemplateProps) {
                     </BreadcrumbItem>
                     <BreadcrumbItem>
                       <BreadcrumbLink isCurrentPage>
-                        {locale.product.breadcrumbCurrent} {productId}
+                        {product?.prod_name}
                       </BreadcrumbLink>
                     </BreadcrumbItem>
                   </Breadcrumb>
@@ -128,7 +166,7 @@ export function ProductTemplate({ productId }: ProductTemplateProps) {
                     fontWeight="semibold"
                     verticalAlign="center"
                   >
-                    {locale.product.title}
+                    {product?.prod_name}
                   </Text>
                 </Skeleton>
               </Stack>
@@ -145,24 +183,15 @@ export function ProductTemplate({ productId }: ProductTemplateProps) {
               </Skeleton>
             </Stack>
             <Skeleton isLoaded={similarProducts.length > 0}>
-              <Text fontSize="sm">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Vestibulum blandit erat non dui luctus, id consectetur justo
-                tempus. Aenean turpis felis, rhoncus non purus vitae,
-                pellentesque ultricies ipsum. Nunc venenatis mauris vitae velit
-                lacinia interdum. Maecenas eget erat purus. Praesent egestas, mi
-                non pretium sodales, odio lorem rhoncus justo, vel rhoncus
-                libero metus vel turpis. Nullam eleifend porttitor pretium.
-                Nullam sed sapien nec augue auctor semper ut et felis. Morbi sed
-                volutpat augue. Nulla quis diam nisl. Integer dignissim, quam
-                euismod ullamcorper lacinia, sapien elit hendrerit sapien, vitae
-                efficitur nulla ligula sit amet ex. Integer sed mi ac metus
-                elementum lacinia. Class aptent taciti sociosqu ad litora
-                torquent per conubia nostra, per inceptos himenaeos.
-              </Text>
+              <Text fontSize="sm">{product?.detail_desc}</Text>
             </Skeleton>
-            <Skeleton isLoaded={similarProducts.length > 0}>
-              <Flex w="full" gridGap="6" alignItems="center">
+            <Skeleton isLoaded={similarProducts.length > 0} flex="1">
+              <Flex
+                w="full"
+                gridGap="6"
+                alignItems="center"
+                alignSelf="flex-end"
+              >
                 <Button
                   flex="1"
                   display="flex"
@@ -181,12 +210,12 @@ export function ProductTemplate({ productId }: ProductTemplateProps) {
               </Flex>
             </Skeleton>
           </Flex>
-        </Flex>
+        </Grid>
 
         <Flex direction="column" as="section" gridGap={4}>
           <Skeleton isLoaded={similarProducts.length > 0}>
-            <Text fontWeight="500">
-              👉🏻 {locale.product.similarProductsSectionTitle}
+            <Text w="fit-content" fontWeight="600" fontSize="xl">
+              {locale.product.similarProductsSectionTitle}
             </Text>
           </Skeleton>
           <Flex
@@ -194,11 +223,14 @@ export function ProductTemplate({ productId }: ProductTemplateProps) {
               base: 'column',
               md: 'row',
             }}
-            gridGap={8}
+            gridGap={6}
           >
             {similarProducts.length > 0 ? (
-              similarProducts.map((id) => (
-                <ProductBox key={id} productId={id} />
+              similarProducts.map((similarProduct) => (
+                <ProductBox
+                  key={similarProduct.article_id}
+                  product={similarProduct}
+                />
               ))
             ) : (
               <>

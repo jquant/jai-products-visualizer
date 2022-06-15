@@ -1,3 +1,4 @@
+import { authenticate, setEnvironment } from 'jai-sdk';
 import { Cookies } from 'react-cookie';
 
 export function getSessionData() {
@@ -9,6 +10,9 @@ export function getSessionData() {
   }
 
   const { access_token, access_environment } = client_session;
+
+  authenticate(access_token);
+  setEnvironment(access_environment);
 
   return {
     access_token,
