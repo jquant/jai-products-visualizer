@@ -1,7 +1,5 @@
 import { ReactNode } from 'react';
 
-import { ToastContainer } from 'react-toastify';
-
 import { Flex } from '@chakra-ui/react';
 
 import { Header } from '@components/core/header';
@@ -18,17 +16,6 @@ export function Layout({ children }: LayoutProps) {
       <Flex direction="column" width="full">
         {children}
       </Flex>
-
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        pauseOnHover
-      />
     </Flex>
   );
 }

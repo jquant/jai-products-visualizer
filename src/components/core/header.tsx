@@ -65,8 +65,8 @@ export function Header() {
               width="fit-content"
               onChange={(e) => handleChangeLocale(e.target.value)}
             >
-              <option value="default">🇧🇷 Português, BR</option>
-              <option value="en-US">🇺🇸 English, US</option>
+              <option value="default">🇺🇸 English, US</option>
+              <option value="pt-BR">🇧🇷 Português, BR</option>
             </Select>
             <Button variant="ghost" onClick={() => handleSignOut()}>
               <FiLogOut />

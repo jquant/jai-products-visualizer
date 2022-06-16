@@ -1,9 +1,12 @@
 {
   "login": {
-    "title": "Insira sua chave de acesso",
-    "subtitle": "Daí exibiremos os produtos selecionados para você 😄",
-    "inputPlaceholder": "Digite a chave de acesso",
-    "accessError": "Chave de acesso inválida. Por favor, tente novamente."
+    "title": "Faça seu login para continuar :)",
+    "subtitle": "É necessário inserir uma chave de acesso e, em seguida, escolher um ambiente para visualizar os dados do sistema.",
+    "inputKeyPlaceholder": "Digite a chave de acesso",
+    "inputEnvPlaceholder": "Selecione um ambiente",
+    "buttonAccess": "Acessar",
+    "buttonCheck": "Verificar",
+    "accessError": "O ambiente selecionado não é compatível com a versão de demonstração. Precisa conter a coleção hm_imgs."
   },
   "products": {
     "title": "Veja nossos produtos"

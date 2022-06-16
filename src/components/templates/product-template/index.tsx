@@ -11,13 +11,13 @@ import {
   Container,
   Flex,
   Grid,
+  GridItem,
   Skeleton,
   Stack,
   Text,
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
-  GridItem,
 } from '@chakra-ui/react';
 
 import { ErrorBox } from '@components/core/error';
@@ -114,121 +114,120 @@ export function ProductTemplate({ productId }: ProductTemplateProps) {
         experimental_spaceY={8}
         mb={16}
       >
-        <Grid
-          as="section"
-          gridGap={8}
-          templateColumns={{
-            base: 'repeat(1, 1fr)',
-            md: 'repeat(12, 1fr)',
+        <Flex
+          direction={{
+            base: 'column',
+            md: 'row',
           }}
+          alignItems="flex-start"
+          gridGap={8}
         >
-          <GridItem
-            colSpan={{
+          <Skeleton
+            flex={{
               base: 'auto',
-              md: 7,
+              md: '1',
             }}
+            isLoaded={similarProducts.length > 0}
+            height={{
+              base: 'xs',
+              md: 'lg',
+            }}
+            w="full"
+            position="relative"
           >
-            <Skeleton isLoaded={similarProducts.length > 0} w="full" h="full">
-              <Box
-                height="lg"
-                position="relative"
-                borderRadius="8px"
-                overflow="hidden"
-              >
-                <Image
-                  src={getImageUrl(String(productId).slice(1))}
-                  layout="fill"
-                  objectFit="cover"
-                  alt={`Image with ID ${productId}`}
-                />
-              </Box>
-            </Skeleton>
-          </GridItem>
+            <Box
+              w="full"
+              h="full"
+              borderRadius="8px"
+              overflow="hidden"
+              bg="white"
+            >
+              <Image
+                src={getImageUrl(String(productId).slice(1))}
+                layout="fill"
+                objectFit="cover"
+                alt={`Image with ID ${productId}`}
+              />
+            </Box>
+          </Skeleton>
 
-          <GridItem
-            colSpan={{
-              base: 'auto',
-              md: 5,
-            }}
-          >
-            <Flex direction="column" experimental_spaceY={8}>
-              <Stack spacing={4}>
-                <Stack spacing={2}>
-                  <Skeleton
-                    isLoaded={similarProducts.length > 0}
-                    h="fit-content"
-                    w="64"
-                  >
-                    <Breadcrumb fontSize="xs" color="gray.500">
-                      <BreadcrumbItem>
-                        <Link href="/products" passHref>
-                          <BreadcrumbLink>
-                            {locale.product.breadcrumbParent}
-                          </BreadcrumbLink>
-                        </Link>
-                      </BreadcrumbItem>
-                      <BreadcrumbItem>
-                        <BreadcrumbLink isCurrentPage>
-                          {product?.prod_name}
+          <Flex direction="column" flex="1" experimental_spaceY={8}>
+            <Stack spacing={4}>
+              <Stack spacing={2}>
+                <Skeleton
+                  isLoaded={similarProducts.length > 0}
+                  h="fit-content"
+                  w="64"
+                >
+                  <Breadcrumb fontSize="xs" color="gray.500">
+                    <BreadcrumbItem>
+                      <Link href="/products" passHref>
+                        <BreadcrumbLink>
+                          {locale.product.breadcrumbParent}
                         </BreadcrumbLink>
-                      </BreadcrumbItem>
-                    </Breadcrumb>
-                  </Skeleton>
-                  <Skeleton isLoaded={similarProducts.length > 0}>
-                    <Text
-                      fontSize="xl"
-                      fontWeight="semibold"
-                      verticalAlign="center"
-                    >
-                      {product?.prod_name || 'loading'}
-                    </Text>
-                  </Skeleton>
-                </Stack>
-
+                      </Link>
+                    </BreadcrumbItem>
+                    <BreadcrumbItem>
+                      <BreadcrumbLink isCurrentPage>
+                        {product?.prod_name}
+                      </BreadcrumbLink>
+                    </BreadcrumbItem>
+                  </Breadcrumb>
+                </Skeleton>
                 <Skeleton isLoaded={similarProducts.length > 0}>
-                  <Stack bg="gray.100" p="2" borderRadius="md" spacing={0}>
-                    <Text fontSize="md" fontWeight="semibold">
-                      💸 R$ 300,00
-                    </Text>
-                    <Text fontSize="xs" fontWeight="400" color="gray.500">
-                      3x R$ 100,00
-                    </Text>
-                  </Stack>
+                  <Text
+                    fontSize="xl"
+                    fontWeight="semibold"
+                    verticalAlign="center"
+                  >
+                    {product?.prod_name || 'loading'}
+                  </Text>
                 </Skeleton>
               </Stack>
-              <Skeleton
-                h={similarProducts.length > 0 ? 'auto' : '48'}
-                isLoaded={similarProducts.length > 0}
-              >
-                <Text fontSize="sm">{product?.detail_desc || 'Loading'}</Text>
-              </Skeleton>
-              <Skeleton isLoaded={similarProducts.length > 0} flex="1">
-                <Flex
-                  w="full"
-                  gridGap="6"
-                  alignItems="center"
-                  alignSelf="flex-end"
-                >
-                  <Button
-                    flex="1"
-                    display="flex"
-                    colorScheme="orange"
-                    alignItems="center"
-                    gridGap={2}
-                    py={6}
-                  >
-                    <FiShoppingCart />
-                    {locale.product.cartButton}
-                  </Button>
 
-                  <Button variant="ghost" py={6}>
-                    <FiHeart size={24} />
-                  </Button>
-                </Flex>
+              <Skeleton isLoaded={similarProducts.length > 0}>
+                <Stack bg="gray.100" p="2" borderRadius="md" spacing={0}>
+                  <Text fontSize="md" fontWeight="semibold">
+                    💸 R$ 300,00
+                  </Text>
+                  <Text fontSize="xs" fontWeight="400" color="gray.500">
+                    3x R$ 100,00
+                  </Text>
+                </Stack>
               </Skeleton>
-            </Flex>
-          </GridItem>
-        </Grid>
+            </Stack>
+            <Skeleton
+              h={similarProducts.length > 0 ? 'auto' : '48'}
+              isLoaded={similarProducts.length > 0}
+            >
+              <Text fontSize="sm">{product?.detail_desc || 'Loading'}</Text>
+            </Skeleton>
+            <Skeleton isLoaded={similarProducts.length > 0} flex="1">
+              <Flex
+                w="full"
+                gridGap="6"
+                alignItems="center"
+                alignSelf="flex-end"
+              >
+                <Button
+                  flex="1"
+                  display="flex"
+                  colorScheme="orange"
+                  alignItems="center"
+                  gridGap={2}
+                  py={6}
+                >
+                  <FiShoppingCart />
+                  {locale.product.cartButton}
+                </Button>
+
+                <Button variant="ghost" py={6}>
+                  <FiHeart size={24} />
+                </Button>
+              </Flex>
+            </Skeleton>
+          </Flex>
+        </Flex>
         {similarProducts.length > 0 ? (
           <ProductsSection
             sectionTitle={locale.product.similarProductsSectionTitle}

@@ -9,14 +9,14 @@ export function useLocale() {
   const { currentLocale } = useContext(LocaleContext);
 
   switch (currentLocale) {
-    case 'en-US':
+    case 'pt-BR':
       return {
-        locale: enUSLocale,
+        locale: ptBRLocale,
         currentLocale,
       };
     default: {
       return {
-        locale: ptBRLocale,
+        locale: enUSLocale,
         currentLocale,
       };
     }

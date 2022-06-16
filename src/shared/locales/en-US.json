@@ -1,9 +1,12 @@
 {
   "login": {
-    "title": "Enter your access token",
-    "subtitle": "And we show the selected products for you 😄",
-    "inputPlaceholder": "Type your access token",
-    "accessError": "Invalid access token. Please, try again."
+    "title": "Login in to continue :)",
+    "subtitle": "You must enter an access key and then choose an environment to view the system data.",
+    "inputKeyPlaceholder": "Enter the access key",
+    "inputEnvPlaceholder": "Select an environment",
+    "buttonAccess": "Access",
+    "buttonCheck": "Check",
+    "accessError": "The selected environment is not compatible with the demo version. It must contain the hm_imgs collection."
   },
   "products": {
     "title": "See our products"

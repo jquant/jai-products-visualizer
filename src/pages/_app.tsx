@@ -9,6 +9,7 @@ import {
 } from '@shared/contexts';
 
 import { AnimatePresence } from 'framer-motion';
+import { ToastContainer } from 'react-toastify';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -54,6 +55,17 @@ function MyApp({ Component, pageProps }: AppProps) {
           </ProductsProvider>
         </UsersProvider>
       </LocaleProvider>
+
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        pauseOnHover
+      />
     </ChakraProvider>
   );
 }

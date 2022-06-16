@@ -10,6 +10,11 @@ export type UsersContextProps = {
     access_token: string,
     access_environment: string
   ) => Promise<void>;
+  validateEnvCollections: (params: {
+    collections: string[];
+    access_token: string;
+    environment: string;
+  }) => Promise<boolean>;
 };
 
 export type UsersProviderProps = {

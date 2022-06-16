@@ -37,11 +37,12 @@ export function LoginTemplate() {
   const [showPassword, setShowPassword] = useState(false);
   const [environments, setEnvironments] = useState<Environment[]>([]);
 
-  const { register, handleSubmit, reset, getValues } = useForm<FormData>();
+  const { register, handleSubmit, reset } = useForm<FormData>();
 
   const router = useRouter();
   const { locale } = useLocale();
-  const { validateAuthToken, authenticateUser } = useUsers();
+  const { validateAuthToken, authenticateUser, validateEnvCollections } =
+    useUsers();
 
   async function onSubmit(data: FormData) {
     setIsLoading(true);
@@ -58,6 +59,17 @@ export function LoginTemplate() {
         toast.error('The inserted key is probably invalid');
       }
     } else {
+      const validateEnv = await validateEnvCollections({
+        access_token: data.access_token,
+        environment: data.access_environment,
+        collections: ['hm_imgs'],
+      });
+
+      if (!validateEnv) {
+        setIsLoading(false);
+        return toast.error(locale.login.accessError);
+      }
+
       try {
         await authenticateUser(data.access_token, data.access_environment);
         router.push('/products');
@@ -118,12 +130,9 @@ export function LoginTemplate() {
               >
                 <Stack spacing={2}>
                   <Text fontSize="2xl" fontWeight="600">
-                    Faça seu login para continuar :)
+                    {locale.login.title}
                   </Text>
-                  <Text color="gray.500">
-                    É necessário inserir uma chave de acesso e, em seguida,
-                    escolher um ambiente para visualizar os dados do sistema.
-                  </Text>
+                  <Text color="gray.500">{locale.login.subtitle}</Text>
                 </Stack>
                 <InputGroup>
                   {isAValidAccessToken && (
@@ -144,7 +153,7 @@ export function LoginTemplate() {
                   <Input
                     type={showPassword ? 'text' : 'password'}
                     variant="filled"
-                    placeholder={locale.login.inputPlaceholder}
+                    placeholder={locale.login.inputKeyPlaceholder}
                     disabled={isLoading || isAValidAccessToken}
                     {...register('access_token', {
                       required: true,
@@ -161,16 +170,16 @@ export function LoginTemplate() {
                       disabled={isLoading || isAValidAccessToken}
                     >
                       {showPassword ? (
-                        <AiOutlineEyeInvisible />
-                      ) : (
                         <AiOutlineEye />
+                      ) : (
+                        <AiOutlineEyeInvisible />
                       )}
                     </InputRightElement>
                   )}
                 </InputGroup>
                 <Select
                   variant="filled"
-                  placeholder="Selecione um ambiente"
+                  placeholder={locale.login.inputEnvPlaceholder}
                   visibility={isAValidAccessToken ? 'visible' : 'hidden'}
                   {...register('access_environment', {
                     required: isAValidAccessToken,
@@ -189,7 +198,9 @@ export function LoginTemplate() {
                   colorScheme="orange"
                   isLoading={isLoading}
                 >
-                  {isAValidAccessToken ? 'Acessar' : 'Verificar'}
+                  {isAValidAccessToken
+                    ? locale.login.buttonAccess
+                    : locale.login.buttonCheck}
                 </Button>
               </Flex>
             </Flex>
