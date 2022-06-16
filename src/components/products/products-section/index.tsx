@@ -12,6 +12,8 @@ export function ProductsSection({
   sectionSubtitle,
   sectionTitle,
 }: ProductsSectionProps) {
+  const randomId = Math.floor(Math.random() * 2e10);
+
   return (
     <Flex direction="column" as="section" gridGap={4} w="full">
       {(sectionTitle || sectionSubtitle) && (
@@ -34,8 +36,8 @@ export function ProductsSection({
           spaceBetween={24}
           slidesPerView={4}
           navigation={{
-            nextEl: '.swiper-custom-button-next',
-            prevEl: '.swiper-custom-button-prev',
+            nextEl: `.swiper-custom-button-next-${randomId}`,
+            prevEl: `.swiper-custom-button-prev-${randomId}`,
           }}
           grabCursor
           modules={[Navigation]}
@@ -58,7 +60,7 @@ export function ProductsSection({
           ))}
         </Swiper>
         <Button
-          className="swiper-custom-button-prev"
+          className={`swiper-custom-button-prev-${randomId}`}
           position="absolute"
           left="0"
           top="50%"
@@ -77,7 +79,7 @@ export function ProductsSection({
           <FiChevronLeft size={24} />
         </Button>
         <Button
-          className="swiper-custom-button-next"
+          className={`swiper-custom-button-next-${randomId}`}
           position="absolute"
           right="0"
           top="50%"
