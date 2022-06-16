@@ -1,5 +1,3 @@
-import { useRef } from 'react';
-
 import { Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Box, Flex, Stack, Text, Button } from '@chakra-ui/react';
@@ -14,9 +12,6 @@ export function ProductsSection({
   sectionSubtitle,
   sectionTitle,
 }: ProductsSectionProps) {
-  const nextRef = useRef(null);
-  const prevRef = useRef(null);
-
   return (
     <Flex direction="column" as="section" gridGap={4} w="full">
       {(sectionTitle || sectionSubtitle) && (
@@ -39,8 +34,8 @@ export function ProductsSection({
           spaceBetween={24}
           slidesPerView={4}
           navigation={{
-            nextEl: nextRef.current,
-            prevEl: prevRef.current,
+            nextEl: '.swiper-custom-button-next',
+            prevEl: '.swiper-custom-button-prev',
           }}
           grabCursor
           modules={[Navigation]}
@@ -63,7 +58,7 @@ export function ProductsSection({
           ))}
         </Swiper>
         <Button
-          ref={prevRef}
+          className="swiper-custom-button-prev"
           position="absolute"
           left="0"
           top="50%"
@@ -82,7 +77,7 @@ export function ProductsSection({
           <FiChevronLeft size={24} />
         </Button>
         <Button
-          ref={nextRef}
+          className="swiper-custom-button-next"
           position="absolute"
           right="0"
           top="50%"
