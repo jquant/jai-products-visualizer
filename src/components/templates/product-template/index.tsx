@@ -46,7 +46,13 @@ export function ProductTemplate({ productId }: ProductTemplateProps) {
     return (
       <Flex direction="column" gap={6}>
         <Skeleton variant="text" height={10} />
-        <Grid templateColumns="repeat(4, 1fr)" gap={8}>
+        <Grid
+          templateColumns={{
+            base: 'repeat(1, 1fr)',
+            md: 'repeat(4, 1fr)',
+          }}
+          gap={8}
+        >
           {Array.from({ length: 4 }, (_, index) => (
             <GridItem key={index}>
               <Skeleton height={300} width="full" />
@@ -151,7 +157,7 @@ export function ProductTemplate({ productId }: ProductTemplateProps) {
             </Box>
           </Skeleton>
 
-          <Flex direction="column" flex="1" experimental_spaceY={8}>
+          <Flex direction="column" flex="1" experimental_spaceY={8} w="full">
             <Stack spacing={4}>
               <Stack spacing={2}>
                 <Skeleton
@@ -174,7 +180,7 @@ export function ProductTemplate({ productId }: ProductTemplateProps) {
                     </BreadcrumbItem>
                   </Breadcrumb>
                 </Skeleton>
-                <Skeleton isLoaded={similarProducts.length > 0}>
+                <Skeleton isLoaded={similarProducts.length > 0} w="full">
                   <Text
                     fontSize="xl"
                     fontWeight="semibold"
@@ -185,7 +191,7 @@ export function ProductTemplate({ productId }: ProductTemplateProps) {
                 </Skeleton>
               </Stack>
 
-              <Skeleton isLoaded={similarProducts.length > 0}>
+              <Skeleton isLoaded={similarProducts.length > 0} w="full">
                 <Stack bg="gray.100" p="2" borderRadius="md" spacing={0}>
                   <Text fontSize="md" fontWeight="semibold">
                     💸 R$ 300,00
@@ -199,10 +205,11 @@ export function ProductTemplate({ productId }: ProductTemplateProps) {
             <Skeleton
               h={similarProducts.length > 0 ? 'auto' : '48'}
               isLoaded={similarProducts.length > 0}
+              w="full"
             >
               <Text fontSize="sm">{product?.detail_desc || 'Loading'}</Text>
             </Skeleton>
-            <Skeleton isLoaded={similarProducts.length > 0} flex="1">
+            <Skeleton isLoaded={similarProducts.length > 0} flex="1" w="full">
               <Flex
                 w="full"
                 gridGap="6"
