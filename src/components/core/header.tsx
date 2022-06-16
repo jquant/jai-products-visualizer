@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 
 import { useCookies } from 'react-cookie';
@@ -41,9 +42,18 @@ export function Header() {
           gridGap="4"
         >
           <Link href="/products" passHref>
-            <Text as="a" fontSize="md" fontWeight="bold">
-              🏪 FakeStore
-            </Text>
+            <Flex gap={4} cursor="pointer">
+              <Image
+                src="/images/jai_logo.png"
+                width={40}
+                height={20}
+                objectFit="contain"
+                alt="Jai Logo"
+              />
+              <Text as="a" fontSize="md" fontWeight="bold">
+                Jai Store
+              </Text>
+            </Flex>
           </Link>
 
           <Flex alignItems="center" gridGap={2}>

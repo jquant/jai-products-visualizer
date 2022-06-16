@@ -16,6 +16,7 @@
     "title": "Cool clothing model",
     "cartButton": "Add to cart",
     "similarProductsSectionTitle": "Others similar products",
+    "recomendationProductsSectionTitle": "You may also like",
     "breadcrumbParent": "Products",
     "breadcrumbCurrent": "Product"
   }

@@ -20,7 +20,6 @@ export function ProductBox({ product }: ProductBoxProps) {
         as="a"
         direction="column"
         gridGap="4"
-        w="full"
         onMouseEnter={() => {
           setIsHover(true);
         }}
@@ -28,10 +27,11 @@ export function ProductBox({ product }: ProductBoxProps) {
           setIsHover(false);
         }}
       >
-        <Box w="full" minH="64" borderRadius="8px" overflow="hidden" bg="white">
+        <Box w="full" borderRadius="lg" overflow="hidden" bg="white">
           <Box
             w="full"
             h="full"
+            minH="64"
             transform={isHover ? 'scale(1.4)' : 'scale(1.6)'}
             transition="all 200ms ease"
             position="relative"
@@ -41,8 +41,6 @@ export function ProductBox({ product }: ProductBoxProps) {
               layout="fill"
               objectFit="contain"
               alt={`${product.prod_name}`}
-              priority
-              quality={80}
             />
           </Box>
         </Box>

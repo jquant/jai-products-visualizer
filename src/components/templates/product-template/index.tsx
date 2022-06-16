@@ -22,14 +22,14 @@ import {
 
 import { ErrorBox } from '@components/core/error';
 import { Layout } from '@components/core/layout';
-import { ProductBox } from '@components/products/product-box';
+import { ProductsSection } from '@components/products/products-section';
 
 import { useLocale } from '@shared/hooks/useLocale';
 import { useProducts } from '@shared/hooks/useProducts';
 import { useUsers } from '@shared/hooks/useUsers';
 
-import { ProductProps } from '@shared/services/usecases/products/get-products/types';
 import { getImageUrl } from '@shared/utils/get-image-url';
+import { ProductProps } from '@shared/services/usecases/products/get-products/types';
 
 import { ProductTemplateProps } from './types';
 
@@ -41,6 +41,21 @@ export function ProductTemplate({ productId }: ProductTemplateProps) {
   const { locale } = useLocale();
   const { accessToken } = useUsers();
   const { fetchSimilarProducts, fetchProducts } = useProducts();
+
+  function renderSectionLoadingTemplate() {
+    return (
+      <Flex direction="column" gap={6}>
+        <Skeleton variant="text" height={10} />
+        <Grid templateColumns="repeat(4, 1fr)" gap={8}>
+          {Array.from({ length: 4 }, (_, index) => (
+            <GridItem key={index}>
+              <Skeleton height={300} width="full" />
+            </GridItem>
+          ))}
+        </Grid>
+      </Flex>
+    );
+  }
 
   useEffect(() => {
     async function fetch() {
@@ -60,24 +75,28 @@ export function ProductTemplate({ productId }: ProductTemplateProps) {
 
   useEffect(() => {
     async function fetch() {
-      const items = await fetchSimilarProducts({
+      const itemsSimilarity = await fetchSimilarProducts({
         database: 'hm_imgs',
         ids: [productId],
       });
 
-      if (items) {
-        const findProducts = await fetchProducts({
-          filter: {
-            $or: items.map((id) => ({
-              article_id: Number(id),
-            })),
-          },
-        });
+      try {
+        if (itemsSimilarity) {
+          const findProducts = await fetchProducts({
+            filter: {
+              $or: itemsSimilarity.map((id) => ({
+                article_id: Number(id),
+              })),
+            },
+          });
 
-        if (findProducts) {
-          setSimilarProducts(findProducts.items);
+          if (findProducts) {
+            setSimilarProducts(findProducts.items);
+          }
         }
-      } else setError(true);
+      } catch {
+        setError(true);
+      }
     }
 
     void fetch();
@@ -96,153 +115,128 @@ export function ProductTemplate({ productId }: ProductTemplateProps) {
         mb={16}
       >
         <Grid
+          as="section"
+          gridGap={8}
           templateColumns={{
             base: 'repeat(1, 1fr)',
             md: 'repeat(12, 1fr)',
           }}
-          gridGap={8}
         >
-          <Skeleton
-            as={GridItem}
-            isLoaded={similarProducts.length > 0}
-            flex={{
+          <GridItem
+            colSpan={{
               base: 'auto',
-              md: '1',
+              md: 7,
             }}
-            height="lg"
-            w="full"
-            position="relative"
-            colSpan={7}
           >
-            <Box
-              borderRadius="8px"
-              __css={{
-                '& *': {
-                  borderRadius: '8px',
-                },
-              }}
-            >
-              <Image
-                src={getImageUrl(String(productId).slice(1))}
-                layout="fill"
-                objectFit="cover"
-                alt={`Image with ID ${productId}`}
-              />
-            </Box>
-          </Skeleton>
+            <Skeleton isLoaded={similarProducts.length > 0} w="full" h="full">
+              <Box
+                height="lg"
+                position="relative"
+                borderRadius="8px"
+                overflow="hidden"
+              >
+                <Image
+                  src={getImageUrl(String(productId).slice(1))}
+                  layout="fill"
+                  objectFit="cover"
+                  alt={`Image with ID ${productId}`}
+                />
+              </Box>
+            </Skeleton>
+          </GridItem>
 
-          <Flex
-            as={GridItem}
-            direction="column"
-            flex="1"
-            experimental_spaceY={8}
-            colSpan={5}
+          <GridItem
+            colSpan={{
+              base: 'auto',
+              md: 5,
+            }}
           >
-            <Stack spacing={4}>
-              <Stack spacing={2}>
-                <Skeleton
-                  isLoaded={similarProducts.length > 0}
-                  h="fit-content"
-                  w="64"
-                >
-                  <Breadcrumb fontSize="xs" color="gray.500">
-                    <BreadcrumbItem>
-                      <Link href="/products" passHref>
-                        <BreadcrumbLink>
-                          {locale.product.breadcrumbParent}
-                        </BreadcrumbLink>
-                      </Link>
-                    </BreadcrumbItem>
-                    <BreadcrumbItem>
-                      <BreadcrumbLink isCurrentPage>
-                        {product?.prod_name}
-                      </BreadcrumbLink>
-                    </BreadcrumbItem>
-                  </Breadcrumb>
-                </Skeleton>
-                <Skeleton isLoaded={similarProducts.length > 0}>
-                  <Text
-                    fontSize="xl"
-                    fontWeight="semibold"
-                    verticalAlign="center"
+            <Flex direction="column" experimental_spaceY={8}>
+              <Stack spacing={4}>
+                <Stack spacing={2}>
+                  <Skeleton
+                    isLoaded={similarProducts.length > 0}
+                    h="fit-content"
+                    w="64"
                   >
-                    {product?.prod_name}
-                  </Text>
+                    <Breadcrumb fontSize="xs" color="gray.500">
+                      <BreadcrumbItem>
+                        <Link href="/products" passHref>
+                          <BreadcrumbLink>
+                            {locale.product.breadcrumbParent}
+                          </BreadcrumbLink>
+                        </Link>
+                      </BreadcrumbItem>
+                      <BreadcrumbItem>
+                        <BreadcrumbLink isCurrentPage>
+                          {product?.prod_name}
+                        </BreadcrumbLink>
+                      </BreadcrumbItem>
+                    </Breadcrumb>
+                  </Skeleton>
+                  <Skeleton isLoaded={similarProducts.length > 0}>
+                    <Text
+                      fontSize="xl"
+                      fontWeight="semibold"
+                      verticalAlign="center"
+                    >
+                      {product?.prod_name || 'loading'}
+                    </Text>
+                  </Skeleton>
+                </Stack>
+
+                <Skeleton isLoaded={similarProducts.length > 0}>
+                  <Stack bg="gray.100" p="2" borderRadius="md" spacing={0}>
+                    <Text fontSize="md" fontWeight="semibold">
+                      💸 R$ 300,00
+                    </Text>
+                    <Text fontSize="xs" fontWeight="400" color="gray.500">
+                      3x R$ 100,00
+                    </Text>
+                  </Stack>
                 </Skeleton>
               </Stack>
-
-              <Skeleton isLoaded={similarProducts.length > 0}>
-                <Stack bg="gray.100" p="2" borderRadius="md" spacing={0}>
-                  <Text fontSize="md" fontWeight="semibold">
-                    💸 R$ 300,00
-                  </Text>
-                  <Text fontSize="xs" fontWeight="400" color="gray.500">
-                    3x R$ 100,00
-                  </Text>
-                </Stack>
-              </Skeleton>
-            </Stack>
-            <Skeleton isLoaded={similarProducts.length > 0}>
-              <Text fontSize="sm">{product?.detail_desc}</Text>
-            </Skeleton>
-            <Skeleton isLoaded={similarProducts.length > 0} flex="1">
-              <Flex
-                w="full"
-                gridGap="6"
-                alignItems="center"
-                alignSelf="flex-end"
+              <Skeleton
+                h={similarProducts.length > 0 ? 'auto' : '48'}
+                isLoaded={similarProducts.length > 0}
               >
-                <Button
-                  flex="1"
-                  display="flex"
-                  colorScheme="orange"
+                <Text fontSize="sm">{product?.detail_desc || 'Loading'}</Text>
+              </Skeleton>
+              <Skeleton isLoaded={similarProducts.length > 0} flex="1">
+                <Flex
+                  w="full"
+                  gridGap="6"
                   alignItems="center"
-                  gridGap={2}
-                  py={6}
+                  alignSelf="flex-end"
                 >
-                  <FiShoppingCart />
-                  {locale.product.cartButton}
-                </Button>
+                  <Button
+                    flex="1"
+                    display="flex"
+                    colorScheme="orange"
+                    alignItems="center"
+                    gridGap={2}
+                    py={6}
+                  >
+                    <FiShoppingCart />
+                    {locale.product.cartButton}
+                  </Button>
 
-                <Button variant="ghost" py={6}>
-                  <FiHeart size={24} />
-                </Button>
-              </Flex>
-            </Skeleton>
-          </Flex>
+                  <Button variant="ghost" py={6}>
+                    <FiHeart size={24} />
+                  </Button>
+                </Flex>
+              </Skeleton>
+            </Flex>
+          </GridItem>
         </Grid>
-
-        <Flex direction="column" as="section" gridGap={4}>
-          <Skeleton isLoaded={similarProducts.length > 0}>
-            <Text w="fit-content" fontWeight="600" fontSize="xl">
-              {locale.product.similarProductsSectionTitle}
-            </Text>
-          </Skeleton>
-          <Flex
-            direction={{
-              base: 'column',
-              md: 'row',
-            }}
-            gridGap={6}
-          >
-            {similarProducts.length > 0 ? (
-              similarProducts.map((similarProduct) => (
-                <ProductBox
-                  key={similarProduct.article_id}
-                  product={similarProduct}
-                />
-              ))
-            ) : (
-              <>
-                <Skeleton h="64" w="full"></Skeleton>
-                <Skeleton h="64" w="full"></Skeleton>
-                <Skeleton h="64" w="full"></Skeleton>
-                <Skeleton h="64" w="full"></Skeleton>
-                <Skeleton h="64" w="full"></Skeleton>
-              </>
-            )}
-          </Flex>
-        </Flex>
+        {similarProducts.length > 0 ? (
+          <ProductsSection
+            sectionTitle={locale.product.similarProductsSectionTitle}
+            products={similarProducts}
+          />
+        ) : (
+          renderSectionLoadingTemplate()
+        )}
       </Container>
     </Layout>
   );

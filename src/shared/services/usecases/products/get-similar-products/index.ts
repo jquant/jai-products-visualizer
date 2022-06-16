@@ -14,12 +14,12 @@ export class GetSimilarProducts {
     }
 
     authenticate(client.access_token);
-    console.log(await getDatabaseInfo('complete'));
 
     try {
       const response = (await similaritySearchById(
         params.database,
-        params.ids
+        params.ids,
+        10
       )) as GetSimilarProductsApiResponse;
 
       return response.similarity[0].results.map((item) => item.id) || null;

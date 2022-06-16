@@ -67,18 +67,18 @@ export function ProductsTemplate() {
               ))
             ) : (
               <>
-                <Skeleton h="64" />
-                <Skeleton h="64" />
-                <Skeleton h="64" />
-                <Skeleton h="64" />
-                <Skeleton h="64" />
-                <Skeleton h="64" />
-                <Skeleton h="64" />
-                <Skeleton h="64" />
-                <Skeleton h="64" />
-                <Skeleton h="64" />
-                <Skeleton h="64" />
-                <Skeleton h="64" />
+                <Skeleton h="72" />
+                <Skeleton h="72" />
+                <Skeleton h="72" />
+                <Skeleton h="72" />
+                <Skeleton h="72" />
+                <Skeleton h="72" />
+                <Skeleton h="72" />
+                <Skeleton h="72" />
+                <Skeleton h="72" />
+                <Skeleton h="72" />
+                <Skeleton h="72" />
+                <Skeleton h="72" />
               </>
             )}
           </Grid>
